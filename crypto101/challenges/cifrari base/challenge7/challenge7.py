@@ -20,10 +20,6 @@ def decipher_left(key, start):
         key[i] = first[i] ^ first[i + 1] ^ key[i + 1] ^ cipher[i]
 
 
-def decipher_viscript():
-
-
-
 if __name__ == '__main__':
     key = {k: '' for k in range(8)}
     # l'ultimo byte del testo viene criptato usando il terzo carattere della chiave (51 (len) === 3, mod 8).
@@ -43,5 +39,9 @@ if __name__ == '__main__':
     # key[i] = first[i] ^ first[i+1] ^ key[i+1] ^ text[i]
     decipher_left(key, 1)
     print(key)
-    # manca l'ultimo carattere, ma possiamo iniziare a decifrare
-
+    print(cipher[2])
+    # per l'ultimo carattere della chiave, andiamo all'incontrario: troviamo i caratteri della flag e
+    # li utilizziamo per ricavare l'ultimo carattere:
+    # flag[-2] = key[2] ^ text[-2] ^ '}' ^ key[-1] ->
+    # flag[-4] = text[-4] ^ key[7] ^ flag[-3] ^ key[-3] ->
+    # key[7] = flag[-4] ^ text[-4] ^ flag[-3] ^ key[-3]
