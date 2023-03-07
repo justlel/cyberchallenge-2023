@@ -1,22 +1,16 @@
 #!/usr/bin/python
 
 import pwn
-import Crypto
+from Crypto.Util.strxor import strxor
 
 def get_key(username, cookie):
     text = f"username={username}&admin=False".encode()
-    key = bytearray()
-    for i in range(len(text)):
-        key.append(cookie[i] ^ text[i])
-    return key
+    return strxor(text, cookie)
 
 
 def encrypt_admin(username, key):
     text = f"username={username}&admin=True".encode()
-    payload = bytearray()
-    for i in range(len(text)):
-        payload.append(text[i] ^ key[i])
-    return payload
+    return strxor(text, key)
 
 
 if __name__ == '__main__':
@@ -25,6 +19,6 @@ if __name__ == '__main__':
     c.sendline(b"lol")
     response = c.recvline().decode().replace("Here's your cookie, keep it safe! ", "")
     key = get_key("lol", bytes.fromhex(response))
-    payload = encrypt_admin("lol", key).hex()
-    print(payload)
+    print(key)
+    print(encrypt_admin("loll", key).hex())
     c.interactive()
