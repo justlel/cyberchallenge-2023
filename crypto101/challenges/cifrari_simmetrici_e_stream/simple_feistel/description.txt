@@ -1,0 +1,25 @@
+Given a plaintext that is divisible into N blocks of 12 bit
+Given a Key of at least 1byte in length
+
+For each block starting from j=0 to N (excluded):
+	a. From k=0 to K (excluded) do these operations on block j:
+	    b. Split the block j into 2 blocks of 6 bit length (lets define them as L,R)
+	    c. Using R, increment its size from 6 to 8 bits using the following schema:
+	        1 2 3 4 5 6 -> 1 2 4 3 4 3 5 6
+	    d. XOR the result with 8 bits of the Key beginning with Key[jK+k] (if necessary wrapping back to the beginning).
+	    e. Split the result into 2 4-bit sections A1, A2
+	    f. Apply the S-box S1 to A1, and the S-box S2 to A2
+	    g. Let C be the concatenation of the two 3-bit results into one 6-bit value
+	    h. Let D be the XOR between C and L
+	    i. Let (L, R) = (R, D)
+        
+ S1	000	001	010	011	100	101	110	111    <- 3 LSB
+ 0	101	010	001	110	011	100	111	000
+ 1	001	100	110	010	000	111	101	011
+
+ S2	000	001	010	011	100	101	110	111
+ 0	100	000	110	101	111	001	011	010
+ 1	101	011	000	111	110	010	001	100
+ 
+ ^
+MSB
